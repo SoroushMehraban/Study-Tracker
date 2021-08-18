@@ -77,7 +77,7 @@ def save_stored_studies():
 
 
 def show_all():
-    today_time = datetime.date.today() - datetime.timedelta(days=1)
+    today_time = datetime.date.today()
     for study_name in stored_studies:
         review_date = stored_studies[study_name]['date'] \
                       + datetime.timedelta(days=stored_studies[study_name]['number_of_studies'])
