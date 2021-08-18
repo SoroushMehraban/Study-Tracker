@@ -39,22 +39,36 @@ def add_new_study():
 def show_review_items():
     today_time = datetime.date.today()
 
-    shown_any = False
-    for study_name in stored_studies:
+    shown_dict = {}
+    for index, study_name in enumerate(stored_studies):
         time_delta = datetime.timedelta(days=stored_studies[study_name]['number_of_studies'])
         if today_time - stored_studies[study_name]['date'] >= time_delta:
-            print(f"{Fore.YELLOW}{study_name}{Style.RESET_ALL}")
+            print(f"{Fore.GREEN}{index}. {Fore.YELLOW}{study_name}{Style.RESET_ALL}")
+            shown_dict[index] = study_name
             shown_any = True
 
-    if not shown_any:
+    if len(shown_dict) == 0:
         print(f"{Fore.RED}Nothing to review{Style.RESET_ALL}")
+    return shown_dict
 
 
 def update_review_item():
-    study_name = input("Enter study name:\n> ")
+    shown_dict = show_review_items()
+
+    user_input = input(f"{Fore.CYAN}Enter study name or a number from above:\n{Fore.YELLOW}>{Style.RESET_ALL} ")
+    try:
+        study_index = int(user_input)
+        try:
+            study_name = shown_dict[study_index]
+        except KeyError:
+            print(f"{Fore.RED} number should be from one of the shown items\n")
+            return update_review_item()
+    except ValueError:
+        study_name = user_input
+
     if study_name in stored_studies:
         stored_studies[study_name]['number_of_studies'] += 1
-        stored_studies[study_name]['date'] += datetime.date.today()
+        stored_studies[study_name]['date'] = datetime.date.today()
         save_stored_studies()
         print(f"{Fore.GREEN}UPDATED SUCCESSFULLY{Style.RESET_ALL}")
     else:
