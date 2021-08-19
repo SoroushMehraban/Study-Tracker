@@ -40,12 +40,13 @@ def show_review_items():
     today_time = datetime.date.today()
 
     shown_dict = {}
-    for index, study_name in enumerate(stored_studies):
+    index = 1
+    for study_name in stored_studies:
         time_delta = datetime.timedelta(days=stored_studies[study_name]['number_of_studies'])
         if today_time - stored_studies[study_name]['date'] >= time_delta:
             print(f"{Fore.GREEN}{index}. {Fore.YELLOW}{study_name}{Style.RESET_ALL}")
             shown_dict[index] = study_name
-            shown_any = True
+            index += 1
 
     if len(shown_dict) == 0:
         print(f"{Fore.RED}Nothing to review{Style.RESET_ALL}")
